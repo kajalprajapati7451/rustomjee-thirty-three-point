@@ -1,42 +1,60 @@
- // Preloader
+// Preloader
         window.addEventListener('load', function() {
             const preloader = document.getElementById('preloader');
-            preloader.style.opacity = '0';
-            setTimeout(() => {
-                preloader.style.display = 'none';
+            setTimeout(function() {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
             }, 500);
-        });
-
-        // Navbar background change on scroll
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.style.background = 'white';
-                navbar.style.padding = '0.8rem 0';
-                navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.1)';
-            } else {
-                navbar.style.background = 'white';
-                navbar.style.padding = '1.2rem 0';
-                navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.08)';
-            }
         });
 
         // Back to top button
         const backToTopButton = document.querySelector('.back-to-top');
+        
         window.addEventListener('scroll', function() {
-            if (window.scrollY > 300) {
+            if (window.pageYOffset > 300) {
                 backToTopButton.classList.add('active');
             } else {
                 backToTopButton.classList.remove('active');
             }
         });
-
+        
         backToTopButton.addEventListener('click', function(e) {
             e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({top: 0, behavior: 'smooth'});
         });
 
-        // Fade in animation for elements
+        // Navbar scroll effect
+        const navbar = document.querySelector('.navbar');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 50) {
+                navbar.style.padding = '10px 0';
+                navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.padding = '12px 0';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Fade-in animation on scroll
         const fadeElements = document.querySelectorAll('.fade-in');
         
         function checkFade() {
@@ -53,3 +71,10 @@
         
         window.addEventListener('scroll', checkFade);
         window.addEventListener('load', checkFade);
+        
+        // Initialize carousel with auto cycling
+        const myCarousel = document.querySelector('#projectCarousel');
+        const carousel = new bootstrap.Carousel(myCarousel, {
+            interval: 4000,
+            wrap: true
+        });
